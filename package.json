@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start":"supervisor server.js",
+    "deploy":"pm2 delete parlatube-server && pm2 start server.js --name=\"parlatube-server\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "FranciZ <franci@proxima.si>",

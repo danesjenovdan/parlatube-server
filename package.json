@@ -1,0 +1,19 @@
+{
+  "name": "parlatube",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "FranciZ <franci@proxima.si>",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "ejs": "^2.5.7",
+    "express": "^4.16.1",
+    "request": "^2.83.0",
+    "request-promise-native": "^1.0.5",
+    "webshot": "^0.18.0"
+  }
+}

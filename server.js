@@ -9,81 +9,95 @@ const webshot = require('webshot');
 
 app.get('/snippet/:snippetId', async ( req, res ) => {
 
-  const snippetId    = req.params.snippetId;
-  const templatePath = `${__dirname}/og_templates/snippet.ejs`;
-  const ogImagePath  = `${__dirname}/og_renders/snippet-${snippetId}.png`;
+  try {
 
-  // Load index.html
-  const indexFile = await new Promise(( resolve ) => {
-    fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => resolve(file));
-  });
-  const indexHtml = indexFile.toString();
-  const $         = cheerio.load(indexHtml);
+    const snippetId    = req.params.snippetId;
+    const templatePath = `${__dirname}/og_templates/snippet.ejs`;
+    const ogImagePath  = `${__dirname}/og_renders/snippet-${snippetId}.png`;
 
-  const ogExists = await new Promise(( resolve ) => {
-    fs.exists(`${__dirname}/og_renders/snippet-${snippetId}.png`, ( exists ) => resolve(exists));
-  });
+    // Load index.html
+    const indexFile = await new Promise(( resolve, reject ) => {
+      fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
+    });
+    const indexHtml = indexFile.toString();
+    const $         = cheerio.load(indexHtml);
 
-  // get snippet data from API
-  const snippetData = JSON.parse(await request(`${config.SNIPPET_URL}?id=${snippetId}`));
+    const ogExists = await new Promise(( resolve ) => {
+      fs.exists(`${__dirname}/og_renders/snippet-${snippetId}.png`, ( exists ) => resolve(exists));
+    });
 
-  if ( !ogExists ) renderOg(templatePath, snippetData, ogImagePath);
+    // get snippet data from API
+    const snippetData = JSON.parse(await request(`${config.SNIPPET_URL}?id=${snippetId}`));
 
-  $('title').text(`${snippetData.name} - Parlatube`);
-  $('head').append(`
+    if ( !ogExists ) renderOg(templatePath, snippetData, ogImagePath);
+
+    $('title').text(`${snippetData.name} - Parlatube`);
+    $('head').append(`
     <meta property="og:url"                content="${config.URL}" />
     <meta property="og:type"               content="article" />
     <meta property="og:title"              content="${snippetData.name} - Parlatube" />
     <meta property="og:description"        content="Kira tuba" />
   `);
 
-  if ( ogExists ) {
-    $('head').append(`
+    if ( ogExists ) {
+      $('head').append(`
         <meta property="og:image"              content="${config.URL}/images/snippet-${snippetId}.png" />
     `);
-  }
+    }
 
-  res.send($.html());
+    res.send($.html());
+
+  } catch ( err ) {
+    console.log(err);
+    res.status(400).send('Something went wrong');
+  }
 
 });
 
 app.get('/playlist/:playlistId', async ( req, res ) => {
 
-  const playlistId   = req.params.playlistId;
-  const templatePath = `${__dirname}/og_templates/playlist.ejs`;
-  const ogImagePath  = `${__dirname}/og_renders/playlist-${playlistId}.png`;
+  try {
 
-  // Load index.html
-  const indexFile = await new Promise(( resolve ) => {
-    fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => resolve(file));
-  });
-  const indexHtml = indexFile.toString();
-  const $         = cheerio.load(indexHtml);
+    const playlistId   = req.params.playlistId;
+    const templatePath = `${__dirname}/og_templates/playlist.ejs`;
+    const ogImagePath  = `${__dirname}/og_renders/playlist-${playlistId}.png`;
 
-  const ogExists = await new Promise(( resolve ) => {
-    fs.exists(`${__dirname}/og_renders/playlist-${playlistId}.png`, ( exists ) => resolve(exists));
-  });
+    // Load index.html
+    const indexFile = await new Promise(( resolve, reject ) => {
+      fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
+    });
+    const indexHtml = indexFile.toString();
+    const $         = cheerio.load(indexHtml);
 
-  // get snippet data from API
-  const snippetData = JSON.parse(await request(`${config.PLAYLIST_URL}?id=${playlistId}`));
+    const ogExists = await new Promise(( resolve ) => {
+      fs.exists(`${__dirname}/og_renders/playlist-${playlistId}.png`, ( exists ) => resolve(exists));
+    });
 
-  if ( !ogExists ) renderOg(templatePath, snippetData, ogImagePath);
+    // get snippet data from API
+    const snippetData = JSON.parse(await request(`${config.PLAYLIST_URL}?id=${playlistId}`));
 
-  $('title').text(`${snippetData.name} - Parlatube`);
-  $('head').append(`
+    if ( !ogExists ) renderOg(templatePath, snippetData, ogImagePath);
+
+    $('title').text(`${snippetData.name} - Parlatube`);
+    $('head').append(`
     <meta property="og:url"                content="${config.URL}" />
     <meta property="og:type"               content="article" />
     <meta property="og:title"              content="${snippetData.name} - Parlatube" />
     <meta property="og:description"        content="Tuba" />
   `);
 
-  if ( ogExists ) {
-    $('head').append(`
+    if ( ogExists ) {
+      $('head').append(`
         <meta property="og:image"              content="${config.URL}/images/playlist-${playlistId}.png" />
     `);
-  }
+    }
 
-  res.send($.html());
+    res.send($.html());
+
+  } catch ( err ) {
+    console.log(err);
+    res.status(400).send('Something went wrong');
+  }
 
 });
 
@@ -97,8 +111,8 @@ app.listen(3000, () => {
 
 async function renderOg( templatePath, data, imagePath ) {
 
-  const template = await new Promise(( resolve ) => {
-    fs.readFile(templatePath, 'utf8', ( err, file ) => resolve(file));
+  const template = await new Promise(( resolve, reject ) => {
+    fs.readFile(templatePath, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
   });
 
   const templateHtml = template.toString();
@@ -107,14 +121,15 @@ async function renderOg( templatePath, data, imagePath ) {
 
   await new Promise(( resolve, reject ) => {
     webshot(rendered, imagePath, {
-      screenSize  : {
-        width  : 1200,
-        height : 630
-      }, shotSize : {
+      screenSize : {
         width  : 1200,
         height : 630
       },
-      siteType    : 'html'
+      shotSize   : {
+        width  : 1200,
+        height : 630
+      },
+      siteType   : 'html'
     }, ( err ) => err ? reject(err) : resolve(imagePath));
   });
 

@@ -39,6 +39,12 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
       <meta property="og:title"              content="${snippetData.name || 'Izsek brez naslova'}" />
       <meta property="og:description"        content="Odreži kateri koli izsek soočenja predsedniških kandidatk in kandidatov in ga deli s prijatelji!" />
       <meta property="og:image"          content="${config.URL}/images/snippet-${snippetId}.png" />
+
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:creator" content="@danesjenovdan">
+      <meta name="twitter:title" content="${snippetData.name || 'Izsek brez naslova'}">
+      <meta name="twitter:description" content="Odreži kateri koli izsek soočenja predsedniških kandidatk in kandidatov in ga deli s prijatelji!">
+      <meta name="twitter:image" content="${config.URL}/images/snippet-${snippetId}.png">
     `);
 
     res.send($.html());

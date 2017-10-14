@@ -1,5 +1,5 @@
 module.exports = {
-  URL          : 'http://parlatube.knedl.si',
-  SNIPPET_URL  : 'http://snippet.knedl.si/getSnippet',
-  PLAYLIST_URL : 'http://snippet.knedl.si/getPlaylist',
+  URL          : 'http://soocenje.24ur.com',
+  SNIPPET_URL  : 'http://snippet.soocenje.24ur.com/getSnippet',
+  PLAYLIST_URL : 'http://snippet.soocenje.24ur.com/getPlaylist',
 };

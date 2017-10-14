@@ -31,7 +31,7 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
 
     if ( !ogExists ) renderOg(templatePath, snippetData, ogImagePath);
 
-    $('title').text(`${snippetData.name} - Parlatube`);
+    $('title').text(`${snippetData.name || 'Brez naslova'} - Parlatube`);
     $('.removeme').remove();
     $('head').append(`
       <meta property="og:url"                content="${config.URL}" />

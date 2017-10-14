@@ -104,6 +104,8 @@ app.get('/playlist/:playlistId', async ( req, res ) => {
 });
 
 app.use('/', express.static(`${__dirname}/parlatube/dist`));
+app.use('/izseki', express.static(`${__dirname}/parlatube/dist`));
+
 
 app.use('/images', express.static(`${__dirname}/og_renders`));
 

@@ -34,7 +34,7 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
     $('title').text(`${snippetData.name || 'Brez naslova'} - Parlatube`);
     $('.removeme').remove();
     $('head').append(`
-      <meta property="og:url"                content="${config.URL}" />
+      <meta property="og:url"                content="${config.URL}/snippet/${snippetId}" />
       <meta property="og:type"               content="article" />
       <meta property="og:title"              content="${snippetData.name || 'Izsek brez naslova'}" />
       <meta property="og:description"        content="Odreži kateri koli izsek soočenja predsedniških kandidatk in kandidatov in ga deli s prijatelji!" />

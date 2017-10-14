@@ -35,15 +35,15 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
     $('head').append(`
     <meta property="og:url"                content="${config.URL}" />
     <meta property="og:type"               content="article" />
-    <meta property="og:title"              content="${snippetData.name} - Parlatube" />
-    <meta property="og:description"        content="Kira tuba" />
+    <meta property="og:title"              content="${snippetData.name || Izsek brez naslova}" />
+    <meta property="og:description"        content="Odreži kateri koli izsek soočenja predsedniških kandidatk in kandidatov in ga deli s prijatelji!" />
   `);
 
-    if ( ogExists ) {
-      $('head').append(`
-        <meta property="og:image"              content="${config.URL}/images/snippet-${snippetId}.png" />
-    `);
-    }
+    // if ( ogExists ) {
+    $('head').append(`
+      <meta property="og:image"          content="${config.URL}/images/snippet-${snippetId}.png" />
+  `);
+    // }
 
     res.send($.html());
 

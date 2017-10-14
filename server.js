@@ -34,17 +34,12 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
     $('title').text(`${snippetData.name} - Parlatube`);
     $('.removeme').remove();
     $('head').append(`
-    <meta property="og:url"                content="${config.URL}" />
-    <meta property="og:type"               content="article" />
-    <meta property="og:title"              content="${snippetData.name || 'Izsek brez naslova'}" />
-    <meta property="og:description"        content="Odreži kateri koli izsek soočenja predsedniških kandidatk in kandidatov in ga deli s prijatelji!" />
-  // `);
-
-  //   // if ( ogExists ) {
-  //   $('head').append(`
+      <meta property="og:url"                content="${config.URL}" />
+      <meta property="og:type"               content="article" />
+      <meta property="og:title"              content="${snippetData.name || 'Izsek brez naslova'}" />
+      <meta property="og:description"        content="Odreži kateri koli izsek soočenja predsedniških kandidatk in kandidatov in ga deli s prijatelji!" />
       <meta property="og:image"          content="${config.URL}/images/snippet-${snippetId}.png" />
-  `);
-    // }
+    `);
 
     res.send($.html());
 

@@ -110,7 +110,30 @@ app.get('/playlist/:playlistId', async ( req, res ) => {
 app.use('/', express.static(`${__dirname}/parlatube/dist`));
 app.use('/izseki', express.static(`${__dirname}/parlatube/dist`));
 app.use('/soocenje/:videoId', express.static(`${__dirname}/parlatube/dist`));
-app.use('/embed/:snippetId', express.static(`${__dirname}/parlatube/dist`));
+
+app.get('/embed/:snippetId', async ( req, res ) => {
+  try {
+    // Load index.html
+    const indexFile = await new Promise(( resolve, reject ) => {
+      fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
+    });
+    const indexHtml = indexFile.toString();
+    const $         = cheerio.load(indexHtml);
+
+    const ogExists = await new Promise(( resolve ) => {
+      fs.exists(`${__dirname}/og_renders/playlist-${playlistId}.png`, ( exists ) => resolve(exists));
+    });
+
+    $('head').append(`<script src="https://cdn.parlameter.si/v1/parlassets/js/iframeResizer.contentWindow.min.js"></script>`);
+
+    res.send($.html());
+  } catch ( err ) {
+    console.log(err);
+    res.status(400).send('Something went wrong');
+  }
+});
+
+// app.use('/embed/:snippetId', express.static(`${__dirname}/parlatube/dist`));
 
 
 app.use('/images', express.static(`${__dirname}/og_renders`));

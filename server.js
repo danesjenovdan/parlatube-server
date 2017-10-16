@@ -120,10 +120,6 @@ app.get('/embed/:snippetId', async ( req, res ) => {
     const indexHtml = indexFile.toString();
     const $         = cheerio.load(indexHtml);
 
-    const ogExists = await new Promise(( resolve ) => {
-      fs.exists(`${__dirname}/og_renders/playlist-${playlistId}.png`, ( exists ) => resolve(exists));
-    });
-
     $('head').append(`<script src="https://cdn.parlameter.si/v1/parlassets/js/iframeResizer.contentWindow.min.js"></script>`);
 
     res.send($.html());

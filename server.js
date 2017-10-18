@@ -10,7 +10,7 @@ const webshot = require('webshot');
 let ogCount = 0;
 
 // Load index.html
-const indexFile = fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
+const indexFile = fs.readFileSync(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
 const indexHtml = indexFile.toString();
 
 app.get('/loaderio-89ad8235d214b8571164dd940922d04d.html', async ( req, res ) => {
@@ -77,7 +77,7 @@ app.get('/playlist/:playlistId', async ( req, res ) => {
     const playlistId   = req.params.playlistId;
     const templatePath = `${__dirname}/og_templates/playlist.ejs`;
     const ogImagePath  = `${__dirname}/og_renders/playlist-${playlistId}.png`;
-    
+
     const $         = cheerio.load(indexHtml);
 
     const ogExists = await new Promise(( resolve ) => {
@@ -118,11 +118,7 @@ app.use('/soocenje/:videoId', express.static(`${__dirname}/parlatube/dist`));
 
 app.get('/embed/:snippetId', async ( req, res ) => {
   try {
-    // Load index.html
-    const indexFile = await new Promise(( resolve, reject ) => {
-      fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
-    });
-    const indexHtml = indexFile.toString();
+
     const $         = cheerio.load(indexHtml);
 
     $('head').append(`<script src="https://cdn.parlameter.si/v1/parlassets/js/iframeResizer.contentWindow.min.js"></script>`);

@@ -5,6 +5,17 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Snippet</h1>
+    <%
+        var frameNumber = Math.floor((start_time / 1000) / 5);
+    %>
+    <style>
+        body {
+            background-color: #1661A0;
+            background-image: url('http://static.soocenje.24ur.com/frames/2/out<%= frameNumber %>.png');
+            background-size: cover;
+            background-position: 0 0;
+            background-repeat: no-repeat;
+        }
+    </style>
 </body>
 </html>

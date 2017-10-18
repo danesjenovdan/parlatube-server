@@ -37,19 +37,25 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
 
     if ( !ogExists ) renderOg(templatePath, snippetData, ogImagePath);
 
-    $('title').text(`${snippetData.name} - Parlatube`);
+    $('title').text(`${snippetData.name || 'Brez naslova'} - Parlatube`);
+    $('.removeme').remove();
+    // <meta property="og:image"          content="${config.URL}/images/snippet-${snippetId}.png" />
+    // <meta name="twitter:image" content="${config.URL}/images/snippet-${snippetId}.png">
     $('head').append(`
-    <meta property="og:url"                content="${config.URL}" />
-    <meta property="og:type"               content="article" />
-    <meta property="og:title"              content="${snippetData.name} - Parlatube" />
-    <meta property="og:description"        content="Kira tuba" />
-  `);
+      <meta property="og:url"                content="${config.URL}/snippet/${snippetId}" />
+      <meta property="og:type"               content="article" />
+      <meta property="og:title"              content="${snippetData.name || 'Izsek brez naslova'}" />
+      <meta property="og:description"        content="Odreži kateri koli izsek soočenja predsedniških kandidatk in kandidatov in ga deli s prijatelji!" />
+      
 
-    if ( ogExists ) {
-      $('head').append(`
-        <meta property="og:image"              content="${config.URL}/images/snippet-${snippetId}.png" />
+      <meta name="twitter:card" content="summary_large_image">
+      <meta name="twitter:creator" content="@danesjenovdan">
+      <meta name="twitter:title" content="${snippetData.name || 'Izsek brez naslova'}">
+      <meta name="twitter:description" content="Odreži kateri koli izsek soočenja predsedniških kandidatk in kandidatov in ga deli s prijatelji!">
+
+      <meta property="og:image"          content="${config.URL}/images/snippet-${snippetId}.png?v=2" />
+      <meta name="twitter:image" content="${config.URL}/images/snippet-${snippetId}.png?v=2">
     `);
-    }
 
     res.send($.html());
 
@@ -108,6 +114,29 @@ app.get('/playlist/:playlistId', async ( req, res ) => {
 });
 
 app.use('/', express.static(`${__dirname}/parlatube/dist`));
+app.use('/izseki', express.static(`${__dirname}/parlatube/dist`));
+app.use('/soocenje/:videoId', express.static(`${__dirname}/parlatube/dist`));
+
+app.get('/embed/:snippetId', async ( req, res ) => {
+  try {
+    // Load index.html
+    const indexFile = await new Promise(( resolve, reject ) => {
+      fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
+    });
+    const indexHtml = indexFile.toString();
+    const $         = cheerio.load(indexHtml);
+
+    $('head').append(`<script src="https://cdn.parlameter.si/v1/parlassets/js/iframeResizer.contentWindow.min.js"></script>`);
+
+    res.send($.html());
+  } catch ( err ) {
+    console.log(err);
+    res.status(400).send('Something went wrong');
+  }
+});
+
+// app.use('/embed/:snippetId', express.static(`${__dirname}/parlatube/dist`));
+
 
 app.use('/images', express.static(`${__dirname}/og_renders`));
 

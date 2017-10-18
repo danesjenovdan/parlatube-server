@@ -7,6 +7,12 @@ const request = require('request-promise-native');
 const ejs     = require('ejs');
 const webshot = require('webshot');
 
+app.get('/loaderio-89ad8235d214b8571164dd940922d04d.html', async ( req, res ) => {
+
+  res.send('loaderio-89ad8235d214b8571164dd940922d04d');
+
+});
+
 app.get('/snippet/:snippetId', async ( req, res ) => {
 
   try {

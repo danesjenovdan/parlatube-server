@@ -7,6 +7,12 @@ const request = require('request-promise-native');
 const ejs     = require('ejs');
 const webshot = require('webshot');
 
+let ogCount = 0;
+
+// Load index.html
+const indexFile = fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
+const indexHtml = indexFile.toString();
+
 app.get('/loaderio-89ad8235d214b8571164dd940922d04d.html', async ( req, res ) => {
 
   res.send('loaderio-89ad8235d214b8571164dd940922d04d');
@@ -20,13 +26,7 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
     const snippetId    = req.params.snippetId;
     const templatePath = `${__dirname}/og_templates/snippet.ejs`;
     const ogImagePath  = `${__dirname}/og_renders/snippet-${snippetId}.png`;
-
-    // Load index.html
-    const indexFile = await new Promise(( resolve, reject ) => {
-      fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
-    });
-    const indexHtml = indexFile.toString();
-    const $         = cheerio.load(indexHtml);
+    const $            = cheerio.load(indexHtml);
 
     const ogExists = await new Promise(( resolve ) => {
       fs.exists(`${__dirname}/og_renders/snippet-${snippetId}.png`, ( exists ) => resolve(exists));
@@ -35,7 +35,11 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
     // get snippet data from API
     const snippetData = JSON.parse(await request(`${config.SNIPPET_URL}?id=${snippetId}`));
 
-    if ( !ogExists ) renderOg(templatePath, snippetData, ogImagePath);
+    if ( !ogExists ) {
+      console.log(`Og count: ${ogCount}`);
+      ogCount++;
+      renderOg(templatePath, snippetData, ogImagePath);
+    }
 
     $('title').text(`${snippetData.name || 'Brez naslova'} - Parlatube`);
     $('.removeme').remove();
@@ -73,12 +77,7 @@ app.get('/playlist/:playlistId', async ( req, res ) => {
     const playlistId   = req.params.playlistId;
     const templatePath = `${__dirname}/og_templates/playlist.ejs`;
     const ogImagePath  = `${__dirname}/og_renders/playlist-${playlistId}.png`;
-
-    // Load index.html
-    const indexFile = await new Promise(( resolve, reject ) => {
-      fs.readFile(`${__dirname}/parlatube/dist/index.html`, 'utf8', ( err, file ) => err ? reject(err) : resolve(file));
-    });
-    const indexHtml = indexFile.toString();
+    
     const $         = cheerio.load(indexHtml);
 
     const ogExists = await new Promise(( resolve ) => {

@@ -64,7 +64,6 @@ app.get('/snippet/:snippetId', async ( req, res ) => {
     res.send($.html());
 
   } catch ( err ) {
-    console.log(err);
     res.status(400).send('Something went wrong');
   }
 
@@ -106,7 +105,6 @@ app.get('/playlist/:playlistId', async ( req, res ) => {
     res.send($.html());
 
   } catch ( err ) {
-    console.log(err);
     res.status(400).send('Something went wrong');
   }
 
@@ -125,7 +123,6 @@ app.get('/embed/:snippetId', async ( req, res ) => {
 
     res.send($.html());
   } catch ( err ) {
-    console.log(err);
     res.status(400).send('Something went wrong');
   }
 });

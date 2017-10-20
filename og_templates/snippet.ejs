@@ -6,12 +6,12 @@
 </head>
 <body>
     <%
-        var frameNumber = Math.floor((start_time / 1000) / 5);
+        var frameNumber = Math.floor((start_time + ((end_time - start_time) / 2)) / 5000);
     %>
     <style>
         body {
             background-color: #1661A0;
-            background-image: url('http://static.soocenje.24ur.com/snippet-image.png');
+            background-image: url('http://static.soocenje.24ur.com/frames/<%= video_id %>/out<%= frameNumber %>.png');
             background-size: cover;
             background-position: 0 0;
             background-repeat: no-repeat;

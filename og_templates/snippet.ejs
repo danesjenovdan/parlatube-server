@@ -5,17 +5,18 @@
     <title>Title</title>
 </head>
 <body>
-    <%
-        var frameNumber = Math.floor((start_time + ((end_time - start_time) / 2)) / 5000);
-    %>
-    <style>
-        body {
-            background-color: #1661A0;
-            background-image: url('http://static.soocenje.24ur.com/frames/<%= video_id %>/out<%= frameNumber %>.png');
-            background-size: cover;
-            background-position: 0 0;
-            background-repeat: no-repeat;
-        }
-    </style>
+  <%
+    var frameNumber = Math.floor((start_time + ((end_time - start_time) / 2)) / 5000);
+    var ending = ((video_id === '4') || (video_id === '3')) ? 'jpg' : 'png';
+  %>
+  <style>
+    body {
+      background-color: #1661A0;
+      background-image: url('http://static.soocenje.24ur.com/frames/<%= video_id %>/out<%= frameNumber %>.<%= ending %>');
+      background-size: cover;
+      background-position: 0 0;
+      background-repeat: no-repeat;
+    }
+  </style>
 </body>
 </html>
